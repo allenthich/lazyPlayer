@@ -1,0 +1,115 @@
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">lazyPlayer</a>
+        </div>
+        <!--/.navbar-collapse -->
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li data-ng-class="{active:isActive('/hypem')}">
+                    <a href="#hypem">HypeMachine</a>
+                </li>
+                <li data-ng-class="{active:isActive('/8tracks')}">
+                    <a href="#/8tracks">8tracks</a>
+                </li>
+                <li data-ng-class="{active:isActive('/downloads')}">
+                    <a href="#/downloads">Downloads</a>
+                </li>
+                <li data-ng-class="{active:isActivePath('/movie')}" data-ng-show="isActivePath('/movie')">
+                    <a href="#/bookings">Song</a>
+                </li>
+            </ul>
+            
+            <div class="sm2-bar-ui">
+                <div style="background-color: rgb(118, 118, 120);" class="bd sm2-main-controls">
+                    <div class="sm2-inline-element sm2-button-element">
+                        <div class="sm2-button-bd">
+                            <a href="#play" class="sm2-inline-button play-pause">Play / pause</a>
+                        </div>
+                     </div>
+                    <div class="sm2-inline-element sm2-inline-status">
+                        <div class="sm2-playlist">
+                            <div class="sm2-playlist-target">
+                                <ul class="sm2-playlist-bd">
+                                    <li ng-model="currentPlaying"> {{currentPlaying}}
+                                        <!-- <span class="label">Explicit</span> -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sm2-progress">
+                            <div class="sm2-row">
+                                <div class="sm2-inline-time">0:00</div>
+                                <div class="sm2-progress-bd">
+                                    <div class="sm2-progress-track">
+                                        <div class="sm2-progress-bar"></div>
+                                        <div class="sm2-progress-ball">
+                                            <div class="icon-overlay"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sm2-inline-duration">0:00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                  <div class="sm2-inline-element sm2-button-element sm2-volume">
+                   <div class="sm2-button-bd">
+                    <span class="sm2-inline-button sm2-volume-control volume-shade"></span>
+                    <a href="#volume" class="sm2-inline-button sm2-volume-control">volume</a>
+                   </div>
+                  </div>
+
+                  <!-- <div class="sm2-inline-element sm2-button-element sm2-menu">
+                   <div class="sm2-button-bd">
+                    <a href="#menu" class="sm2-inline-button menu">menu</a>
+                   </div>
+                  </div>
+                </div>
+                <div style="background-color: rgb(118, 118, 120);" class="bd sm2-playlist-drawer sm2-element">
+                    <div class="sm2-box-shadow"></div>
+                    <div class="sm2-extra-controls">
+                        <div class="bd">
+                            <div class="sm2-inline-element sm2-button-element">
+                            <a href="#prev" title="Previous" class="sm2-inline-button previous">&lt; previous</a>
+                            </div>
+
+                            <div class="sm2-inline-element sm2-button-element">
+                                <a href="#next" title="Next" class="sm2-inline-button next">&gt; next</a>
+                            </div>
+                            <!-- unimplemented -->
+                            <!--
+                            <div class="sm2-inline-element sm2-button-element disabled">
+                             <a href="#repeat" title="Repeat playlist" class="sm2-inline-button repeat">&infin; repeat</a>
+                            </div>
+                            -->
+
+                            <!-- unimplemented -->
+                            <!--
+                            <div class="sm2-inline-element sm2-button-element disabled">
+                             <a href="#shuffle" title="Shuffle" class="sm2-inline-button shuffle">shuffle</a>
+                            </div>
+                            -->
+                        <!-- </div> -->
+                    <!-- </div> -->
+                </div>
+            </div>
+            
+            <!-- Search bar -->
+            <form class="navbar-form navbar-right" role="search">
+                <div class="input-group add-on">
+                  <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+                  <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

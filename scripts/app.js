@@ -1,0 +1,1 @@
+var mpApp = angular.module('mpApp', ['ngResource', 'ngRoute']);

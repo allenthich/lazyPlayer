@@ -1,0 +1,25 @@
+Notes:
+	Download music/mp3 while listening when using Hypemachine or 8tracks
+
+	Home page:
+		views: Popular, Hypemachine, 8tracks
+
+
+Hype Machine:
+	/playlist/popular/3day/json/[pagenumber]/data.js
+	EXAMPLE: http://hypem.com/playlist/loved/aren55555/json/1/data.js
+
+	The “Latest” feed is exposed as 
+	http://hypem.com/playlist/popular/3day/json/1/data.js
+	“/playlist/subscriptions/[yourusername]/json/[pagenumber]/data.js”
+
+	Your “Loved” songs are available as 
+	“/playlist/loved/[yourusername]/json/[pagenumber]/data.js”
+
+	The “Popular” feed is at 
+	“/playlist/popular/3day/json/[pagenumber]/data.js”
+
+	Lastly, but certainly not least of all, there is a search api. Most excellent. 
+	“/playlist/search/[somesearchkey]/json/data.js”
+
+	var req_url='/serve/source/'+window.playList['tracks'][track].id+'/'+window.playList['tracks'][track].key

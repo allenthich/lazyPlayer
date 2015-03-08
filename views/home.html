@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        <!-- 8tracks Popular Container -->
+        <div class="col-md-6">
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading">8tracks Popular</div>
+              <div class="panel-body">
+                <p>Stuff</p>
+              </div>
+
+            </div>
+        </div>
+        <!-- Hype Machine Popular Container-->
+         <div class="col-md-6">
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading right">Hypemachine Popular 20</div>
+                <!-- Table -->
+              <table class="table table-condensed">
+                </thead>
+                <tbody>
+                    <tr ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hmTopTwenty-' + $index + 1}}">
+                        <!-- <td> {{$index + 1}}</td> -->
+                        <td> <img ng-src="{{song.thumb_url}}"> </td>
+                        <td> {{song.title}} <br> {{song.artist}} </td>
+                        <td> <button ng-click="stream(song.mediaid, song.title, song.artist)"><i class="fa fa-play"></i></button></td>
+                        <!-- <td> {{song.artist}} </td> -->
+                    </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+        </div>
+        <div id='test'>
+        <!-- <div class="col-md-4" data-ng-repeat="movie in movies | orderBy:'name':false | filter:search">
+            <h2>{{movie.name | uppercase}}</h2>
+            <p>
+                <img data-ng-src="{{movie.thumb}}" class="thumb-big">
+            </p>
+            <p>{{movie.review | limitTo:99}}...</p>
+            <p>
+                <span class="label label-warning availability">Availability ({{movie.availability}})</span>
+                <a data-ng-href="#/movie/{{movie.id}}" class="btn btn-primary ">Review</a>
+                <a data-ng-href="#/bookTickets/{{movie.id}}" class="btn btn-success " role="button" data-ng-disabled="movie.availability == 0">Book »</a>
+            </p>
+        </div> -->
+        </div>
+    </div>
+</div>
