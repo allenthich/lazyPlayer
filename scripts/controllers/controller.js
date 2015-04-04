@@ -1,6 +1,10 @@
 //Home controller loads only ONCE
 mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFactory, $scope, $location) {
     $scope.headerSrc = "views/header.html";
+
+    var playingSongId = null;
+    $scope.paused = false;
+
     console.log("Calling mpAppController")
 
     //Load SoundManager 2 player
@@ -19,24 +23,57 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     //     $scope.scToken = response.data.access_token;
     // });
 
-    $scope.stream = function(id, title, artist){
-        var serveLink = mpAppHypeMFactory.getServeURL(id);
-        serveLink.then(function(response) {
-            console.log('Response url: ', response);
-            var mySound = soundManager.createSound({
-              id: artist,
-              url: response.data.url
-            });
-            $scope.currentPlaying = title + ' - ' + artist;
-            mySound.play();
+    //Function to load when document is ready
+    $(function() {
+        console.log("jQuery Document.Ready being fired!");
+        $("tr").hover(function() {
+            console.log("hypeTwenty mouseover!");
         });
+    });
+
+
+    $scope.stream = function(id, title, artist){
+        var songId = 'hype-' + id;
+        $scope.paused = !$scope.paused;
+
+        if (songId == playingSongId){
+            soundManager.togglePause(playingSongId);
+        } else {
+            if (playingSongId != null){
+                $scope.currentSong.stop();
+                // soundManager.unload(playingSongId);
+            }
+
+            var serveLink = mpAppHypeMFactory.getServeURL(id);
+            serveLink.then(function(response) {
+                console.log('Response url: ', response);
+                soundManager.stopAll();
+                $scope.currentSong = soundManager.createSound({
+                    id: songId,
+                    url: response.data.url,
+                    onstop: function() {
+                        this.destruct();
+                    },
+                    onfinish: function() {
+                        $scope.paused = !$scope.paused;
+                    }
+                });
+
+                playingSongId = songId;
+                $scope.currentPlaying = title + ' - ' + artist;
+                $scope.currentSong.play();
+                playing = true;
+            });
+        }
+        
+        
         // var streamLink = mpAppHypeMFactory.getStreamURL(title, artist);
         // streamLink.then(function(stream_url){
-        //     var mySound = soundManager.createSound({
+        //     var $scope.currentSong = soundManager.createSound({
         //       id: title + ' - ' + artist,
         //       url: stream_url
         //     });
-        //     mySound.play();
+        //     $scope.currentSong.play();
         // });
     };
 });

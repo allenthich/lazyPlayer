@@ -23,3 +23,27 @@ Hype Machine:
 	“/playlist/search/[somesearchkey]/json/data.js”
 
 	var req_url='/serve/source/'+window.playList['tracks'][track].id+'/'+window.playList['tracks'][track].key
+
+
+Usages:
+	Stream popular trending music from 8tracks, Hypemachine
+	Download them to your machine
+	Create playlists
+
+
+	Collect My Love feat. Alex Newell - The Knocks
+
+
+	ng-repeat songs
+		display active song
+		play icon over album art
+			if album art isn't present
+
+
+		SONG ROW, waveform transparent backround in entire row
+		 _____________________________________________________________
+		| __________
+		||		   |
+		||ALBUM ART| TITLE
+		||_________| ARTIST
+		|_____________________________________________________________
