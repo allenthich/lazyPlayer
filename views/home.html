@@ -13,14 +13,31 @@
         </div>
         <!-- Hype Machine Popular Container-->
          <div class="col-md-6">
-            <div class="panel panel-default">
+         <ol id="hypePop" class="media-list">
+            <li class="row media space-bottom pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
+                <div class="media-left">
+                    <a ng-click="stream(song.mediaid, song.title, song.artist)">
+                        <img class="media-object" ng-src="{{song.thumb_url}}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <span>
+                        {{song.title}} <br>
+                        {{song.artist}}
+                    </span>
+                </div>
+            </li>
+        </ol> 
+            <!-- <div class="panel panel-default"> -->
               <!-- Default panel contents -->
-              <div class="panel-heading right">Hypemachine Popular 20</div>
+              <!-- <div class="panel-heading right">Hypemachine Popular 20</div> -->
                 <!-- Table -->
-              <table class="table table-hover">
+                
+
+              <!-- <table class="table table-hover">
                 <tbody>
                     <tr ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid}}">
-                        <!-- <td> {{$index + 1}}</td> -->
+                        
                         <td> <img ng-src="{{song.thumb_url}}"> </td>
                         <td> {{song.title}} <br> {{song.artist}} </td>
                         <td> 
@@ -29,10 +46,9 @@
                             <i ng-show="paused" class="fa fa-pause"></i>
                             </button>
                         </td>
-                        <!-- <td> {{song.artist}} </td> -->
                     </tr>
                 </tbody>
-              </table>
+              </table> -->
 
 
             </div>

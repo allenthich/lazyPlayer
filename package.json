@@ -8,9 +8,9 @@
       "toolbar": true,
   		"resizable" : true,
   		"width": 1280,
-        "height": 600
+        "height": 600,
         // "frame": false
-	    // "min_width": 400,
+	    "min_width": 400
      //    "min_height": 200,payLoad
      //    "max_width": 800,
      //    "max_height": 600

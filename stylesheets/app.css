@@ -13,6 +13,9 @@ body {
 	text-align: right;
 }
 
+
+
+/*Sound Manager*/
 .sm2-bar-ui {
  font-size: 16px;
 }
@@ -22,4 +25,22 @@ body {
 }
 .sm2-bar-ui .sm2-inline-texture {
  background: transparent;
+}
+
+/*Hype Machine Ordered List*/
+.space-bottom {
+	margin-bottom: 1rem;
+}
+
+.pad-bottom {
+	padding-bottom: 1rem;
+}
+
+.separator-bottom {
+	border-bottom: 1px solid #e6e6e6
+}
+
+/*Hype Machine OL Individual Songs*/
+#hypePop li:hover {
+	background-color: #e6e6e6;
 }
