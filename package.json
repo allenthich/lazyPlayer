@@ -4,16 +4,16 @@
   "description": "A Node webkit app",
   "main": "index.html",
   "window": {
-      "toolbar": false,
-      // "toolbar": true,
+      // "toolbar": false,
+      "toolbar": true,
       "frame": false,
   		"resizable" : true,
   		"width": 425,//400,
-      "height": 600,
+      "height": 560,
 	    "min_width": 425,
       "max_width": 425,
 
-      "min_height": 600//,payLoad
+      "min_height": 560//,payLoad
       // "max_height": 600
   },
   "webkit": {

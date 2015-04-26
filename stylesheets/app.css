@@ -1,6 +1,20 @@
+
+
 /*header.html*/
 .row-navbar-left {
 	margin-top: 3.6em;
+}
+
+.windowTools {
+  -webkit-app-region: no-drag;
+  text-decoration: none;
+  color: #9d9d9d;
+  font-size: 1.2em;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  float: right;
+  margin-right: .5em;
+  margin-top: .5em;
 }
 
 /*index.html*/
@@ -31,6 +45,8 @@
 
 .row-main-body {
 	/*margin-top: 1em;*/
+    overflow-x: hidden; 
+    height: 500px;
 }
 
 
@@ -70,6 +86,10 @@
 
 #hypePop li.li-no-hover:hover {
 	background-color: transparent;
+}
+
+#hypePop h4 {
+  float: right;
 }
 
 
@@ -168,15 +188,15 @@
 
 /*Scrollbar Styles*/
 ::-webkit-scrollbar {
-    height: 10px;
+  height: 10px;
   width: 5px;
   background: #fff;
-    }
+}
 ::-webkit-scrollbar-thumb {
-    background: #9d9d9d;
-    -webkit-border-radius: 1ex;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  background: #9d9d9d;
+  -webkit-border-radius: 1ex;
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
 }
 ::-webkit-scrollbar-corner {
-    background: #000;
+  background: #000;
 }

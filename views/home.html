@@ -5,7 +5,19 @@
             <!-- Hype Machine Popular Container-->
             <div id="inner-container-right">
                 <ol id="hypePop" class="media-list">
-                    <li class="row pad-bottom separator-bottom li-no-hover"><h3>Most Popular</h3></li>
+                    <li class="row pad-bottom separator-bottom li-no-hover">
+                        <div>
+                            <h4>hypeM Most Popular</h4>
+<!--                             <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li><a href="#">8tracks Featured</a></li>
+                                </ul>
+                            </div>  -->
+                        </div> 
+                    </li>
 
                     <li class="row pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
                         <div class="media-body">
