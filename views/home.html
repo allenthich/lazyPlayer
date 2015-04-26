@@ -1,71 +1,65 @@
-<div class="container">
-    <div class="row">
-        <!-- 8tracks Popular Container -->
-        <div class="col-md-6">
-            <div class="panel panel-default">
-              <!-- Default panel contents -->
-              <div class="panel-heading">8tracks Popular</div>
-              <div class="panel-body">
-                <p>Stuff</p>
-              </div>
+<div class="container container-main">
+    <div class="row row-main-body">
+        <div class="container container-right">
+            
+            <!-- Hype Machine Popular Container-->
+            <div id="inner-container-right">
+                <ol id="hypePop" class="media-list">
+                    <li class="row pad-bottom separator-bottom li-no-hover"><h3>Most Popular</h3></li>
 
-            </div>
-        </div>
-        <!-- Hype Machine Popular Container-->
-         <div class="col-md-6">
-         <ol id="hypePop" class="media-list">
-            <li class="row media space-bottom pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
-                <div class="media-left">
-                    <a ng-click="stream(song.mediaid, song.title, song.artist)">
-                        <img class="media-object" ng-src="{{song.thumb_url}}">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <span>
-                        {{song.title}} <br>
-                        {{song.artist}}
-                    </span>
-                </div>
-            </li>
-        </ol> 
-            <!-- <div class="panel panel-default"> -->
-              <!-- Default panel contents -->
-              <!-- <div class="panel-heading right">Hypemachine Popular 20</div> -->
-                <!-- Table -->
-                
+                    <li class="row pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
+                        <div class="media-body">
+                            <span>
+                                <b>{{song.title}}</b><br>
+                                {{song.artist}}
+                            </span>
+                        </div>
+                        <div class="media-right">
+                            <a ng-click="stream(song.mediaid, song.title, song.artist)">
+                                <img class="media-object" ng-src="{{song.thumb_url}}">
+                            </a>
+                        </div>
+                    </li>
+                </ol> 
+                <!-- <div class="panel panel-default"> -->
+                  <!-- Default panel contents -->
+                  <!-- <div class="panel-heading right">Hypemachine Popular 20</div> -->
+                    <!-- Table -->
+                    
 
-              <!-- <table class="table table-hover">
-                <tbody>
-                    <tr ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid}}">
-                        
-                        <td> <img ng-src="{{song.thumb_url}}"> </td>
-                        <td> {{song.title}} <br> {{song.artist}} </td>
-                        <td> 
-                            <button ng-click="stream(song.mediaid, song.title, song.artist)">
-                            <i ng-hide="paused" class="fa fa-play"></i>
-                            <i ng-show="paused" class="fa fa-pause"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-              </table> -->
+                  <!-- <table class="table table-hover">
+                    <tbody>
+                        <tr ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid}}">
+                            
+                            <td> <img ng-src="{{song.thumb_url}}"> </td>
+                            <td> {{song.title}} <br> {{song.artist}} </td>
+                            <td> 
+                                <button ng-click="stream(song.mediaid, song.title, song.artist)">
+                                <i ng-hide="paused" class="fa fa-play"></i>
+                                <i ng-show="paused" class="fa fa-pause"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                  </table> -->
 
 
             </div>
-        </div>
-        <div id='test'>
-        <!-- <div class="col-md-4" data-ng-repeat="movie in movies | orderBy:'name':false | filter:search">
-            <h2>{{movie.name | uppercase}}</h2>
-            <p>
-                <img data-ng-src="{{movie.thumb}}" class="thumb-big">
-            </p>
-            <p>{{movie.review | limitTo:99}}...</p>
-            <p>
-                <span class="label label-warning availability">Availability ({{movie.availability}})</span>
-                <a data-ng-href="#/movie/{{movie.id}}" class="btn btn-primary ">Review</a>
-                <a data-ng-href="#/bookTickets/{{movie.id}}" class="btn btn-success " role="button" data-ng-disabled="movie.availability == 0">Book »</a>
-            </p>
-        </div> -->
+            </div>
+            <div id='test'>
+            <!-- <div class="col-md-4" data-ng-repeat="movie in movies | orderBy:'name':false | filter:search">
+                <h2>{{movie.name | uppercase}}</h2>
+                <p>
+                    <img data-ng-src="{{movie.thumb}}" class="thumb-big">
+                </p>
+                <p>{{movie.review | limitTo:99}}...</p>
+                <p>
+                    <span class="label label-warning availability">Availability ({{movie.availability}})</span>
+                    <a data-ng-href="#/movie/{{movie.id}}" class="btn btn-primary ">Review</a>
+                    <a data-ng-href="#/bookTickets/{{movie.id}}" class="btn btn-success " role="button" data-ng-disabled="movie.availability == 0">Book »</a>
+                </p>
+            </div> -->
+            </div>
         </div>
     </div>
 </div>

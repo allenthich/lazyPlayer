@@ -1,18 +1,37 @@
-body {
-    padding-top: 50px;
+/*header.html*/
+.row-navbar-left {
+	margin-top: 3.6em;
 }
+
+/*index.html*/
 #container {
-    padding: 39px 0px;
+  padding-left: 6em;
+  -webkit-app-region: no-drag;
 }
 
-.left {
-	text-align: left;
+/*home.html*/
+.container-main {
+	padding-right: 0;
 }
 
-.right {
+.container-right {
+	/*padding-top: 0.8em;*/
+    /*padding-left: 6em;*/
+    padding-right: 0em;
+}
+
+#inner-container-right {
+  /*padding-left: 2em;*/
+  padding-right: 2em;
+}
+
+.container-right h3 {
 	text-align: right;
 }
 
+.row-main-body {
+	/*margin-top: 1em;*/
+}
 
 
 /*Sound Manager*/
@@ -28,19 +47,136 @@ body {
 }
 
 /*Hype Machine Ordered List*/
-.space-bottom {
+/*.space-bottom {
 	margin-bottom: 1rem;
-}
+}*/
 
-.pad-bottom {
+/*.pad-bottom {
 	padding-bottom: 1rem;
-}
+}*/
 
 .separator-bottom {
 	border-bottom: 1px solid #e6e6e6
 }
 
 /*Hype Machine OL Individual Songs*/
+#hypePop li {
+  padding: 0.5em;
+}
+
 #hypePop li:hover {
-	background-color: #e6e6e6;
+  background-color: #e6e6e6;
+}
+
+#hypePop li.li-no-hover:hover {
+	background-color: transparent;
+}
+
+
+
+.drawer {
+  margin-top: 0.8em;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  height: 100%;
+  padding: .4em 0;
+  background: #9d9d9d;
+  color: white;
+  text-align: center;
+  font-size: 0;
+}
+
+.drawer li {
+  pointer-events: none;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  list-style: none;
+  line-height: 100%;
+  transform: translateZ(0);
+}
+
+.drawer a {
+  pointer-events: auto;
+  position: relative;
+  display: block;
+  /*min-width: 5em;*/
+  /*margin-bottom: .4em;*/
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: .4em;
+  padding-right: .4em;
+  /*padding: .4em;*/
+  line-height: 100%;
+  font-size: 16px;
+  text-decoration: none;
+  color: #222;
+  transition: background 0.3s;
+}
+
+.drawer a:active,a
+.drawer a:focus { background: #B44659; }
+
+.drawer i {
+  display: block;
+  margin-bottom: .2em;
+  /*font-size: 2em;*/
+}
+
+.drawer span {
+  font-size: .625em;
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+
+
+.drawer > li { display: block;}
+
+.drawer > li > a { background: ##9d9d9d; }
+
+.drawer > li:hover { z-index: 100; }
+
+.drawer > li:hover a { background: #B44659; }
+
+.drawer > li a:hover { background: #F56356; }
+
+.drawer > li > a:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: 4px;
+  opacity: 0;
+  background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0, 0, 0, 0.65)), color-stop(100%, transparent));
+  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  background: -ms-linear-gradient(left, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000', GradientType=1 );
+  transition: opacity 0.5s;
+}
+
+.drawer > li:hover a:after { opacity: 1; }
+
+/*Home icon in drawer*/
+#drawer-first {
+  padding-top: 2em;
+}
+
+/*Scrollbar Styles*/
+::-webkit-scrollbar {
+    height: 10px;
+  width: 5px;
+  background: #fff;
+    }
+::-webkit-scrollbar-thumb {
+    background: #9d9d9d;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+::-webkit-scrollbar-corner {
+    background: #000;
 }
