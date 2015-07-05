@@ -7,14 +7,14 @@
       // "toolbar": false,
       "toolbar": true,
       "frame": false,
-  		"resizable" : true,
+  		"resizable" : false,
   		"width": 425,//400,
-      "height": 560,
+      "height": 600,
 	    "min_width": 425,
       "max_width": 425,
 
-      "min_height": 560//,payLoad
-      // "max_height": 600
+      "min_height": 560,//,payLoad
+      "max_height": 600
   },
   "webkit": {
     "plugin": true

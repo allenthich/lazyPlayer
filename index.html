@@ -11,9 +11,9 @@
 
 </head>
 <!-- <body class="container" data-ng-controller="mpAppController"> -->
-    <body class="container" onload="onLoad();" data-ng-controller="mpAppController" style="-webkit-app-region: drag">
+    <body class="container" onload="onLoad();" data-ng-controller="mpAppController">
 	<div data-ng-include src="headerSrc"></div>
-    <div id="container">
+    <div id="mainContainer" class="no-drag">
         <div data-ng-view=""></div>
     </div>
 

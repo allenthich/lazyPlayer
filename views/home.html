@@ -1,36 +1,44 @@
 <div class="container container-main">
     <div class="row row-main-body">
         <div class="container container-right">
-            
             <!-- Hype Machine Popular Container-->
             <div id="inner-container-right">
                 <ol id="hypePop" class="media-list">
-                    <li class="row pad-bottom separator-bottom li-no-hover">
+                    <!--<li class="row pad-bottom separator-bottom li-no-hover">
                         <div>
-                            <h4>hypeM Most Popular</h4>
-<!--                             <div class="btn-group">
+                            
+                                <h4>hypeM Most Popular</h4>
+                                 <div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                     <li><a href="#">8tracks Featured</a></li>
                                 </ul>
-                            </div>  -->
+                            </div> 
                         </div> 
-                    </li>
+                    </li> -->
 
                     <li class="row pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
+                        <div class="media-left">
+                            <a id="songImage" ng-click="stream(song.mediaid, song.title, song.artist)">
+                                <img class="media-object" ng-src="{{song.thumb_url}}">
+                            </a>
+                        </div>
                         <div class="media-body">
                             <span>
                                 <b>{{song.title}}</b><br>
                                 {{song.artist}}
                             </span>
+
+<!--                             <button id="downloadSong" type="button" class="btn btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                            </button>
+                            <button id="starSong" type="button" class="btn btn-default" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                            </button> -->
                         </div>
-                        <div class="media-right">
-                            <a ng-click="stream(song.mediaid, song.title, song.artist)">
-                                <img class="media-object" ng-src="{{song.thumb_url}}">
-                            </a>
-                        </div>
+
                     </li>
                 </ol> 
                 <!-- <div class="panel panel-default"> -->

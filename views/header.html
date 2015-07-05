@@ -1,20 +1,49 @@
-<div class="row row-navbar-left">
+<div class="row row-navbar-left no-drag">
     <!-- Left nav bar -->
-    <ul class="drawer">
+    <!-- <ul class="drawer">
       <li id="drawer-first"> <a href="#"> <i class="fa fa-home"></i> <span>Home</span> </a></li>
-      <li> <a href="#"> <i class="fa fa-music"></i> <span>8tracks</span> </a> </li>
-      <li> <a href="#"> <i class="fa fa-music"></i> <span>hypeM</span> </a> </li>
-      <li> <a href="#"> <i class="fa fa-download"></i> <span>Downloads</span> </a> </li>
-    </ul>
+      <li> <a href="#/8tracks"> <i class="fa fa-music"></i> <span>8tracks</span> </a> </li>
+      <li> <a href="#hypem"> <i class="fa fa-music"></i> <span>hypeM</span> </a> </li>
+      <li> <a href="#/downloads"> <i class="fa fa-download"></i> <span>Downloads</span> </a> </li>
+    </ul> -->
 
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+ <!--   <div id="top-navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#/">lazyPlayer</a>
-                <a class="windowTools" onclick="window.close()" href="javascript:">X</a>
-                <a class="windowTools" onclick="window.minimize()" href="javascript:">_</a>
+            <div id="windowButtons" class="navbar-header">
+                <a id="now-playing" class="navbar-brand sans-upper">Kaskade - Last Chance</a>
+
+                <ul>
+                  <li><a class="windowTools sans-upper" onclick="window.minimize()" href="javascript:">_</a></li>
+                  <li><a class="windowTools sans-upper" onclick="window.close()" href="javascript:">X</a></li>
+                </ul>
             </div>
         </div>
+    </div>
+  -->
+<!--     OLD TOP NAV BAR WITH ICONS<div id="nav-bar-top" class="container">
+    <ul class="drawer">
+      <li id="drawer-first"> <a href="#"> <i class="fa fa-home"></i> <span>Home</span> </a></li>
+      <li> <a href="#/8tracks"> <i class="fa fa-music"></i> <span>8tracks</span> </a> </li>
+      <li> <a href="#hypem"> <i class="fa fa-music"></i> <span>hypeM</span> </a> </li>
+      <li> <a href="#/downloads"> <i class="fa fa-download"></i> <span>Downloads</span> </a> </li>
+    </ul>
+  </div> -->
+  <div id="nav-bar-top" class="container">
+    <ul class="drawer">
+      <li id="drawer-first"> <a href="#"><span>Home</span> </a></li>
+      <li class="no-drag"> <a href="#/music"><span>Music</span> </a> </li>
+      <li> <a href="#/downloads"><span>Downloads</span> </a> </li>
+    </ul>
+  </div>
+
+  <div id="categoryTabs" class="container">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="no-drag"><a href="#">Popular</a></li>
+      <li role="presentation" class="active no-drag"><a href="#">Top</a></li>
+    </ul>
+  </div>
+
+    <div id="bottom-navbar" class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
     </div>
 </div>
