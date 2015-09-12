@@ -70,6 +70,64 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
                     resolve(response.data[0].stream_url + '/?client_id=' + params.client_id);
                 });
             });
+        },
+        downloadSong: function (file_url) {
+            // Dependencies
+            var fs = require('fs');
+            var url = require('url');
+            var http = require('http');
+            var https = require('https');
+            var exec = require('child_process').exec;
+            var spawn = require('child_process').spawn;
+
+            var DOWNLOAD_DIR = './';
+            var file_name = "test.mp3";
+            var file = fs.createWriteStream(DOWNLOAD_DIR + file_name);
+
+            var i = 0;
+
+            //Get song from soundcloud's API
+            http.get(file_url, function(res) {
+                console.log("Got response: " + res.statusCode);
+
+                res.on("data", function(chunk) {
+                    //Soundcloud redirects us to a secure URL where the song is actually stored
+                    var redirectURL = JSON.parse(chunk).location;
+                    if (redirectURL) {
+                        https.get(redirectURL, function(res) {
+                            //Begin streaming the song chunks into a file stream
+                            res.on("data", function(chunk) {
+                                console.log("WRITING " + ++i);
+                                file.write(chunk);
+                            });
+                            res.on("end", function() {
+
+                                file.end();
+                            });
+
+                        }).on('error', function(e) {
+                          console.log("Got error: " + e.message);
+                          file.end();
+                        });
+                    }
+                });
+            }).on('error', function(e) {
+              console.log("Got error: " + e.message);
+              file.end();
+            });
+
+            // http.get(file_url, function(res) {
+            //   console.log("Got response: " + res.statusCode);
+
+            //   res.on("data", function(chunk) {
+            //     console.log("BODY: " + chunk);
+            //     console.log("WRITING")
+            //     file.write(chunk);
+            //   });
+            // }).on('error', function(e) {
+            //   console.log("Got error: " + e.message);
+            //   file.end();
+            // });
         }
     };
 });

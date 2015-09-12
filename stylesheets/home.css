@@ -1,0 +1,84 @@
+/*home.html*/
+.container-main {
+	/*padding-right: 0;*/
+}
+
+.container-right {
+	/*margin-top: 1.6em;*/
+      /*padding-left: 6em;*/
+    /*padding-right: 0em;*/
+  padding-bottom: 6em;
+}
+
+#inner-container-right {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+.container-right h3 {
+	text-align: right;
+}
+
+.row-main-body {
+	margin-top: 4em;
+    /*overflow-x: hidden; */
+    /*height: 400px;*/
+}
+
+.nav-tabs>li {
+  float: right;
+}
+
+#song-controls {
+  float: right;
+  /*vertical-align: center;*/
+  bottom: 0;
+}
+
+#song-controls > button {
+  border-bottom: 0;
+}
+
+/*Hype Machine Ordered List*/
+/*.space-bottom {
+  margin-bottom: 1rem;
+}*/
+
+/*.pad-bottom {
+  padding-bottom: 1rem;
+}*/
+
+.separator-bottom {
+  border-bottom: 1px solid #ccc;
+}
+
+#hypePop {
+  list-style: decimal;
+}
+
+/*Hype Machine OL Individual Songs*/
+#hypePop li {
+  padding: 0.5em;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: .805em;
+  /*font-family: sans-serif;*/
+  text-transform: uppercase;
+}
+
+#hypePop li:hover {
+  background-color: #EBB900;
+}
+
+#hypePop li.li-no-hover:hover {
+  background-color: transparent;
+}
+
+#hypePop h4 {
+  float: right;
+}
+
+#songImage > img {
+  border:1px solid #021a40;
+  border-radius: 2px 2px 0 0;
+}

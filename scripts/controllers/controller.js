@@ -3,7 +3,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     $scope.headerSrc = "views/header.html";
 
     var playingSongId = null;
-    $scope.paused = false;
+    $scope.currentPlayingSong = {};
 
     console.log("Calling mpAppController")
 
@@ -15,6 +15,27 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     hypeListReady.then(function(hypePoplist) {
         console.log("mpAppController: ", hypePoplist);
         $scope.topTwenty = hypePoplist;
+        if ($scope.topTwenty.length != 0) {
+            $scope.currentPlayingSong = $scope.topTwenty[0];
+
+            //Initialize first song
+            var serveLink = mpAppHypeMFactory.getServeURL($scope.currentPlayingSong.mediaid);
+            var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
+            serveLink.then(function(response) {
+                $scope.currentSong = soundManager.createSound({
+                    id: songId,
+                    url: response.data.url,
+                    onstop: function() {
+                        this.destruct();
+                    },
+                    onfinish: function() {
+                        this.destruct();
+                    }
+                });
+
+                playingSongId = songId;
+            });
+        }
     });
 
     //Get access token from Soundcloud for playing Hypemachine songs
@@ -32,17 +53,14 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     });
 
 
-    $scope.stream = function(id, title, artist){
+    $scope.stream = function(id, songIndex){
         var songId = 'hype-' + id;
-        $scope.paused = !$scope.paused;
 
         if (songId == playingSongId){
             soundManager.togglePause(playingSongId);
         } else {
-            if (playingSongId != null){
-                $scope.currentSong.stop();
-                // soundManager.unload(playingSongId);
-            }
+            $scope.currentPlayingSong = $scope.topTwenty[songIndex];
+            $scope.currentSong.stop();
 
             var serveLink = mpAppHypeMFactory.getServeURL(id);
             serveLink.then(function(response) {
@@ -55,27 +73,32 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
                         this.destruct();
                     },
                     onfinish: function() {
-                        $scope.paused = !$scope.paused;
+                        this.destruct();
                     }
                 });
 
                 playingSongId = songId;
-                $scope.currentPlaying = title + ' - ' + artist;
                 $scope.currentSong.play();
-                playing = true;
             });
         }
-        
-        
-        // var streamLink = mpAppHypeMFactory.getStreamURL(title, artist);
-        // streamLink.then(function(stream_url){
-        //     var $scope.currentSong = soundManager.createSound({
-        //       id: title + ' - ' + artist,
-        //       url: stream_url
-        //     });
-        //     $scope.currentSong.play();
-        // });
     };
+
+    $scope.playPause = function() {
+        var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
+        if ($scope.currentSong.paused) {
+            $scope.currentSong.play();
+        } else {
+            soundManager.togglePause(songId);
+        }
+    };
+
+    $scope.downloadSong = function(id) {
+        var serveLink = mpAppHypeMFactory.getServeURL(id);
+        serveLink.then(function(response) {
+            var directSongURL = response.data.url;
+            mpAppHypeMFactory.downloadSong(directSongURL);
+        });
+    }
 });
 
 //Reloads everytime route redirects

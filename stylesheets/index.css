@@ -1,0 +1,13 @@
+/*index.html*/
+#mainContainer {
+  /*padding-left: 6em;*/
+  /*position: absolute;*/
+}
+
+body {
+  /*background-color: #fffdfa;*/
+  background-color: #DADFE1;
+  -webkit-app-region: drag;
+}
+
+body::-webkit-scrollbar { width: 0 !important }

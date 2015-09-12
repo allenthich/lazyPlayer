@@ -21,7 +21,7 @@
 
                     <li class="row pad-bottom separator-bottom" ng-repeat="song in topTwenty" ng-if="song != null" ng-attr-id="{{ 'hype-' + song.mediaid }}">
                         <div class="media-left">
-                            <a id="songImage" ng-click="stream(song.mediaid, song.title, song.artist)">
+                            <a id="songImage" ng-click="stream(song.mediaid, $index)">
                                 <img class="media-object" ng-src="{{song.thumb_url}}">
                             </a>
                         </div>
@@ -30,15 +30,15 @@
                                 <b>{{song.title}}</b><br>
                                 {{song.artist}}
                             </span>
-
-<!--                             <button id="downloadSong" type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
-                            </button>
-                            <button id="starSong" type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                            </button> -->
                         </div>
-
+                        <div id="song-controls" class="media-right">
+                            <a id="downloadSong" type="button" class="btn btn-default sharp outline" aria-label="Left Align" ng-click="downloadSong(song.mediaid)">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                            </a>
+                            <a id="starSong" type="button" class="btn btn-default sharp outline" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                            </a>
+                        </div>
                     </li>
                 </ol> 
                 <!-- <div class="panel panel-default"> -->

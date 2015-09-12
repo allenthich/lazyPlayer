@@ -1,4 +1,4 @@
-<div class="row row-navbar-left no-drag">
+<div class="row stick-top no-drag">
     <!-- Left nav bar -->
     <!-- <ul class="drawer">
       <li id="drawer-first"> <a href="#"> <i class="fa fa-home"></i> <span>Home</span> </a></li>
@@ -31,19 +31,74 @@
   </div> -->
   <div id="nav-bar-top" class="container">
     <ul class="drawer">
-      <li id="drawer-first"> <a href="#"><span>Home</span> </a></li>
-      <li class="no-drag"> <a href="#/music"><span>Music</span> </a> </li>
-      <li> <a href="#/downloads"><span>Downloads</span> </a> </li>
+      <li id="drawer-first"> <a href="#/music"><span>LISTEN</span> </a></li>
+      <li class="no-drag"> <a href="#/manage"><span>MANAGE</span> </a> </li>
+      <li> <a href="#/downloads"><span>SHARE</span> </a> </li>
     </ul>
   </div>
+<!--   <div id="music-bar-top" class="container">
+    <ul class="row"> -->
+     <!--  <li>
+        <button type="button" class="btn btn-default sharp outline toggle" ng-click="playPause()">
+            <i class="glyphicon glyphicon-play"></i>
+        </button>
 
-  <div id="categoryTabs" class="container">
+
+      </li>
+      <li style="width: 275px;">
+        <span style="text-overflow: clip;">
+            <b>{{currentPlayingSong.title}}</b>
+        </span>
+        <br>
+        <span>
+            {{currentPlayingSong.artist}}
+        </span>
+      </li>
+      <li>
+          <button type="button" class="btn btn-default sharp outline toggle" aria-label="Justify">
+            <i class="fa fa-bars"></i>
+          </button>
+      </li> -->
+<!--     </ul>
+  </div> -->
+
+<!--   <div id="categoryTabs" class="container">
     <ul class="nav nav-tabs">
       <li role="presentation" class="no-drag"><a href="#">Popular</a></li>
       <li role="presentation" class="active no-drag"><a href="#">Top</a></li>
     </ul>
-  </div>
+  </div> -->
 
     <div id="bottom-navbar" class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
-    </div>
+      <ul class="row">
+        <li>
+          <img ng-src="{{currentPlayingSong.thumb_url}}" style="margin-top: -0.5em; position: absolute; opacity: 0.7;"></img>
+        </li>
+        <li>
+          <a type="button" class="btn btn-default sharp outline toggle" ng-click="playPause()" style="width: 50px; height:50px; margin-top: -0.28em">
+              <i class="glyphicon glyphicon-play" ng-show="!currentSong.playState || currentSong.paused" style="padding-top: 8px;"></i>
+              <i class="glyphicon glyphicon-pause" ng-show="currentSong.playState && !currentSong.paused" style="padding-top: 8px;"></i>
+          </a>
+
+          <!-- <img src="assets/img/darkArrow.png" width="40" height="40"></i> -->
+          <!--<div>Icon made by 
+            <a href="http://www.google.com" title="Google">Google</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under 
+            <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>
+          </div> -->
+        </li>
+        <li style="width: 275px;">
+          <span style="text-overflow: clip;">
+              <b>{{currentPlayingSong.title}}</b>
+          </span>
+          <br>
+          <span>
+              {{currentPlayingSong.artist}}
+          </span>
+        </li>
+        <li style="right: 0; position: absolute; margin-right: 1em">
+            <a type="button" class="btn btn-default sharp outline toggle" aria-label="Justify">
+              <i class="fa fa-bars"></i>
+            </a>
+        </li>
+      </ul>
 </div>
