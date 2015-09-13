@@ -3,6 +3,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     $scope.headerSrc = "views/header.html";
 
     var playingSongId = null;
+    $scope.currentSong = null;
     $scope.currentPlayingSong = {};
 
     console.log("Calling mpAppController")
@@ -19,22 +20,26 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
             $scope.currentPlayingSong = $scope.topTwenty[0];
 
             //Initialize first song
-            var serveLink = mpAppHypeMFactory.getServeURL($scope.currentPlayingSong.mediaid);
-            var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
-            serveLink.then(function(response) {
-                $scope.currentSong = soundManager.createSound({
-                    id: songId,
-                    url: response.data.url,
-                    onstop: function() {
-                        this.destruct();
-                    },
-                    onfinish: function() {
-                        this.destruct();
-                    }
-                });
+            //if (options.playOnStartUp)
+            // $scope.stream($scope.currentPlayingSong.mediaid, 0);
 
-                playingSongId = songId;
-            });
+            // var serveLink = mpAppHypeMFactory.getServeURL($scope.currentPlayingSong.mediaid);
+            // var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
+            // serveLink.then(function(response) {
+            //     $scope.currentSong = soundManager.createSound({
+            //         id: songId,
+            //         url: response.data.url,
+            //         onstop: function() {
+            //             this.destruct();
+            //         },
+            //         onfinish: function() {
+            //             //if (options.autoplay)
+            //             this.id = 
+            //         }
+            //     });
+
+            //     playingSongId = songId;
+            // });
         }
     });
 
@@ -52,15 +57,19 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
         });
     });
 
-
+    //GET stream URL and play song, cleans up upon stop or selecting a new song
+    //When song is done playing, cleans up and plays next song
     $scope.stream = function(id, songIndex){
         var songId = 'hype-' + id;
 
         if (songId == playingSongId){
             soundManager.togglePause(playingSongId);
         } else {
+            //Another song was selected
+            if ($scope.currentSong)
+                $scope.currentSong.stop();
+
             $scope.currentPlayingSong = $scope.topTwenty[songIndex];
-            $scope.currentSong.stop();
 
             var serveLink = mpAppHypeMFactory.getServeURL(id);
             serveLink.then(function(response) {
@@ -73,7 +82,10 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
                         this.destruct();
                     },
                     onfinish: function() {
+                        //if (options.autoplay)
                         this.destruct();
+                        var nextIndex = ++ songIndex;
+                        $scope.stream($scope.topTwenty[nextIndex].mediaid, nextIndex);
                     }
                 });
 
@@ -83,14 +95,14 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
         }
     };
 
-    $scope.playPause = function() {
-        var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
-        if ($scope.currentSong.paused) {
-            $scope.currentSong.play();
-        } else {
-            soundManager.togglePause(songId);
-        }
-    };
+    // $scope.playPause = function() {
+    //     var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
+    //     if ($scope.currentSong.paused) {
+    //         $scope.currentSong.play();
+    //     } else {
+    //         soundManager.togglePause(songId);
+    //     }
+    // };
 
     $scope.downloadSong = function(id) {
         var serveLink = mpAppHypeMFactory.getServeURL(id);

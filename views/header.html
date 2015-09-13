@@ -17,8 +17,8 @@
                   <li><a class="windowTools sans-upper" onclick="window.minimize()" href="javascript:">_</a></li>
                   <li><a class="windowTools sans-upper" onclick="window.close()" href="javascript:">X</a></li>
                 </ul>
-            </div>
-        </div>
+            </div
+>        </div>
     </div>
   -->
 <!--     OLD TOP NAV BAR WITH ICONS<div id="nav-bar-top" class="container">
@@ -75,7 +75,7 @@
           <img ng-src="{{currentPlayingSong.thumb_url}}" style="margin-top: -0.5em; position: absolute; opacity: 0.7;"></img>
         </li>
         <li>
-          <a type="button" class="btn btn-default sharp outline toggle" ng-click="playPause()" style="width: 50px; height:50px; margin-top: -0.28em">
+          <a type="button" class="btn btn-default sharp outline toggle" ng-click="stream(currentPlayingSong.mediaid, 0)" style="width: 50px; height:50px; margin-top: -0.28em">
               <i class="glyphicon glyphicon-play" ng-show="!currentSong.playState || currentSong.paused" style="padding-top: 8px;"></i>
               <i class="glyphicon glyphicon-pause" ng-show="currentSong.playState && !currentSong.paused" style="padding-top: 8px;"></i>
           </a>
