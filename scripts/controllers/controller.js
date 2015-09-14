@@ -89,7 +89,16 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
                         //if (options.autoplay)
                         this.destruct();
                         var nextIndex = ++ songIndex;
-                        $scope.stream($scope.topTwenty[nextIndex].mediaid, nextIndex);
+
+                        //On autoplay: automate fetching next list
+                        if (nextIndex == 19 || nextIndex == 39)
+                            loadNextPoplist();
+
+                        //Last song check
+                        if (nextIndex == 50)
+                            return;
+                        else
+                            $scope.stream($scope.topTwenty[nextIndex].mediaid, nextIndex);
                     }
                 });
 
@@ -117,11 +126,10 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
         });
     };
 
-
     //Reload new data when reaching bottom of page
     $(window).scroll(function () {
         if ($(document).height() <= $(window).scrollTop() + $(window).height())
-            if (hypePopPage != 4)
+            if (hypePopPage < 3)
                 loadNextPoplist();
     });
 });

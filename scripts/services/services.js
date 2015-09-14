@@ -27,9 +27,11 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
                 .then(function(response) {
                     return $q(function(resolve, reject) {
                         for (var songPos = 0; songPos < 21; ++songPos){
-                            //Pages 1/2 consist only of 20 songs, page 3 has 10
-                            if (songPos == 20 || (songPos == 8 && page == 3))
-                                resolve(hypePoplist);
+                            //Pages 1&2 consist only of 20 songs, page 3 has 10
+                            if (songPos == 20)
+                                return resolve(hypePoplist);
+                            else if (songPos == 10 && page == 3) 
+                                return resolve(hypePoplist);
                             else
                                 hypePoplist.push(response.data[songPos]);
                         }
