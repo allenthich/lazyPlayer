@@ -6,13 +6,16 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     $scope.currentSong = null;
     $scope.currentPlayingSong = {};
 
+    //HypeM popular page
+    var hypePopPage = 1;
+
     console.log("Calling mpAppController")
 
     //Load SoundManager 2 player
     mpAppFactory.loadSoundManager();
 
     //Load Top 20 from Hypemachine 
-    var hypeListReady = mpAppHypeMFactory.getHypePopList();
+    var hypeListReady = mpAppHypeMFactory.getHypePopList(hypePopPage);
     hypeListReady.then(function(hypePoplist) {
         console.log("mpAppController: ", hypePoplist);
         $scope.topTwenty = hypePoplist;
@@ -60,6 +63,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     //GET stream URL and play song, cleans up upon stop or selecting a new song
     //When song is done playing, cleans up and plays next song
     $scope.stream = function(id, songIndex){
+        //TODO: Check if streaming last song, load next page
         var songId = 'hype-' + id;
 
         if (songId == playingSongId){
@@ -95,22 +99,31 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
         }
     };
 
-    // $scope.playPause = function() {
-    //     var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
-    //     if ($scope.currentSong.paused) {
-    //         $scope.currentSong.play();
-    //     } else {
-    //         soundManager.togglePause(songId);
-    //     }
-    // };
-
     $scope.downloadSong = function(id) {
         var serveLink = mpAppHypeMFactory.getServeURL(id);
         serveLink.then(function(response) {
             var directSongURL = response.data.url;
             mpAppHypeMFactory.downloadSong(directSongURL);
         });
-    }
+    };
+
+    //Gets next page of popular MAX:50 songs
+    function loadNextPoplist() {
+        var hypeListReady = mpAppHypeMFactory.getHypePopList(++hypePopPage);
+        hypeListReady.then(function(hypePoplist) {
+            mpAppHypeMFactory.concatSongs($scope.topTwenty, hypePoplist, function (updatedList) {
+                $scope.topTwenty = updatedList;
+            });
+        });
+    };
+
+
+    //Reload new data when reaching bottom of page
+    $(window).scroll(function () {
+        if ($(document).height() <= $(window).scrollTop() + $(window).height())
+            if (hypePopPage != 4)
+                loadNextPoplist();
+    });
 });
 
 //Reloads everytime route redirects

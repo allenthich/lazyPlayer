@@ -1,5 +1,6 @@
 # lazyPlayer
 ![alt tag](https://raw.githubusercontent.com/allenthich/lazyPlayer/master/lazyPlayerProgress.png)
+<br>
 LazyPlayer App is an Open-Source project to support HypeMachine for desktop Windows and Linux. <br>
 It's built with NW.js, Node.js, Angular.js and uses SoundManager2 API.
 
