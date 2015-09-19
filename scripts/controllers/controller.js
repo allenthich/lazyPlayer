@@ -6,6 +6,10 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     $scope.currentSong = null;
     $scope.currentPlayingSong = {};
 
+    //Initialize progress bar
+    $scope.songPosition = 0;
+    $scope.songBuffered = 0;
+
     //HypeM popular page
     var hypePopPage = 1;
 
@@ -82,6 +86,15 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
                 $scope.currentSong = soundManager.createSound({
                     id: songId,
                     url: response.data.url,
+                    whileloading: function() {
+                        //Bytesloaded returns a %
+                        var songBuffered = (this.bytesLoaded * 100).toFixed();
+                        $('#songBuffer').css('width',songBuffered+'%')
+                    },
+                    whileplaying: function() {
+                        var songPosition = ((this.position.toFixed() / this.duration) * 100).toFixed();
+                        $('#songPosition').css('width',songPosition+'%')
+                    },
                     onstop: function() {
                         this.destruct();
                     },
@@ -108,11 +121,11 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
         }
     };
 
-    $scope.downloadSong = function(id) {
-        var serveLink = mpAppHypeMFactory.getServeURL(id);
+    $scope.downloadSong = function(song) {
+        var serveLink = mpAppHypeMFactory.getServeURL(song.mediaid);
         serveLink.then(function(response) {
             var directSongURL = response.data.url;
-            mpAppHypeMFactory.downloadSong(directSongURL);
+            mpAppHypeMFactory.downloadSong(directSongURL, song);
         });
     };
 
@@ -132,6 +145,8 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
             if (hypePopPage < 3)
                 loadNextPoplist();
     });
+
+    $scope.isActive = function (selectedUrl) { return selectedUrl === $location.path(); };
 });
 
 //Reloads everytime route redirects

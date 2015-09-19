@@ -1,1 +1,1 @@
-var mpApp = angular.module('mpApp', ['ngResource', 'ngRoute']);
+var mpApp = angular.module('mpApp', ['ngRoute', 'ngResource', 'ui.bootstrap']);

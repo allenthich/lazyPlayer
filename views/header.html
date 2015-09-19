@@ -31,9 +31,9 @@
   </div> -->
   <div id="nav-bar-top" class="container">
     <ul class="drawer">
-      <li id="drawer-first"> <a href="#/music"><span>LISTEN</span> </a></li>
-      <li class="no-drag"> <a href="#/manage"><span>MANAGE</span> </a> </li>
-      <li> <a href="#/downloads"><span>SHARE</span> </a> </li>
+      <li ng-class="{ selectedTab: isActive('/') }"> <a href="#/"><span>LISTEN</span> </a></li>
+      <li ng-class="{ selectedTab: isActive('/manage') }"> <a href="#/manage"><span>MANAGE</span> </a> </li>
+      <li ng-class="{ selectedTab: isActive('/share') }"> <a href="#/downloads"><span>SHARE</span> </a> </li>
     </ul>
   </div>
 <!--   <div id="music-bar-top" class="container">
@@ -68,7 +68,10 @@
       <li role="presentation" class="active no-drag"><a href="#">Top</a></li>
     </ul>
   </div> -->
-
+    <uib-progress class="navbar-inverse navbar-fixed-bottom">
+      <uib-bar id="songPosition" value="songPosition" style="z-index: 1;"></uib-bar>
+      <uib-bar id="songBuffer" value="songBuffered" style="background-color: #a3a3a3; height: 3px"></uib-bar>
+    </uib-progress>
     <div id="bottom-navbar" class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
       <ul class="row">
         <li>

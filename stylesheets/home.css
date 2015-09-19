@@ -33,6 +33,8 @@
   float: right;
   /*vertical-align: center;*/
   bottom: 0;
+  margin-right: -6px;
+  margin-bottom: -1px;
 }
 
 #song-controls > button {

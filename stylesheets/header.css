@@ -66,6 +66,25 @@
   font-size: 2em;
 }
 
+.progress {
+  height: 3px;
+  margin-bottom: 69px;
+  overflow: visible;
+  background-color: transparent;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  color: #ccc;
+  background-color: #EBB900;
+  box-shadow: none;
+}
+
 /*#categoryTabs {
   margin-top: 1em;
 }
@@ -156,16 +175,13 @@
   text-transform: uppercase;
 }
 
-
 /*.drawer > li { display: block;}*/
-
 /*.drawer > li > a { background: #9d9d9d; }*/
-
-.drawer > li:hover { z-index: 100; }
-
+/*.drawer > li:hover { z-index: 100; }*/
+/*.drawer > li:active { border-bottom: 4px solid #EBB900; }*/
 /*.drawer > li:hover a { background: #B44659; }*/
 
-.drawer > li a:hover { border-bottom: 4px solid #EBB900; }
+.drawer > li a:hover { }
 
 .drawer > li > a:after {
 /*  content: "";
@@ -188,9 +204,9 @@
 .drawer > li:hover a:after { opacity: 1; }
 
 /*Home icon in drawer*/
-#drawer-first {
+/*#drawer-first {
   padding-top: 2em;
-}
+}*/
 
 #nav-bar-top {
   padding-left: 0;
@@ -199,6 +215,10 @@
 
 #nav-bar-top > ul > li {
   -webkit-app-region: no-drag;
+}
+
+.selectedTab {
+  border-bottom: 4px solid #EBB900;
 }
 
 #music-bar-top {
