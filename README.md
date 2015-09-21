@@ -9,3 +9,6 @@ It's built with NW.js, Node.js, Angular.js and uses SoundManager2 API.
 - Stream songs from HypeMachine's Top 20
 - Song downloading
 
+## Installation notes
+
+Requires ffmpeg static binary to be located in folder 'ffmpeg' of root directory

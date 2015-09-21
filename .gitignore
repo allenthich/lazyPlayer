@@ -9,3 +9,7 @@ icudtl.dat
 d3dcompiler_47.dll
 credits.html
 debug.log
+node_modules
+ffmpeg
+npm-debug.log
+*.mp3

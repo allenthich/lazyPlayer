@@ -3,6 +3,7 @@ mpApp.factory('mpAppFactory', function ($q, $http) {
         loadSoundManager: function () {
             soundManager.setup({
               url: '../../assets/soundmanager2/',
+              debugMode: false,
               onready: function() {
                 // var mySound = soundManager.createSound({
                 //   id: 'TESTINGSONG',
@@ -74,18 +75,24 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
         //         });
         //     });
         // },
-        downloadSong: function (file_url) {
+        downloadSong: function (file_url, songMeta) {
             // Dependencies
             var fs = require('fs');
-            var url = require('url');
             var http = require('http');
             var https = require('https');
-            var exec = require('child_process').exec;
-            var spawn = require('child_process').spawn;
+
+            //External npm module - ffmpeg API
+            var ffmpeg = require('fluent-ffmpeg');
 
             var DOWNLOAD_DIR = './';
-            var file_name = "test.mp3";
-            var file = fs.createWriteStream(DOWNLOAD_DIR + file_name);
+            var file_name = songMeta.artist + " - " + songMeta.title + ".mp3";
+            var temp_mp3 = "temp.mp3";
+
+            //Creates new file stream to pipe mp3 chunks from HTTP res into
+            var file = fs.createWriteStream(DOWNLOAD_DIR + temp_mp3);
+
+            var title ='title=' + songMeta.title.toString();
+            var artist = 'artist=' + songMeta.artist.toString();
 
             var i = 0;
 
@@ -104,8 +111,13 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
                                 file.write(chunk);
                             });
                             res.on("end", function() {
-
+                                console.log("END FILE DOWNLOAD")
                                 file.end();
+
+                                //Sets ffmpeg source/path and writes meta into file
+                                setFfmpeg(function() {
+                                    writeSongMeta();
+                                });
                             });
 
                         }).on('error', function(e) {
@@ -119,18 +131,51 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
               file.end();
             });
 
-            // http.get(file_url, function(res) {
-            //   console.log("Got response: " + res.statusCode);
+            //Set paths for ffmpeg and ffprobe before use
+            function setFfmpeg (callback) {
+                fs.realpath("./ffmpeg/bin/", function(err, resolvedPath) {
+                    if (err) throw err;
+                    // console.log(resolvedPath)
+                    ffmpeg.setFfmpegPath(resolvedPath + "/ffmpeg.exe");
+                    ffmpeg.setFfprobePath(resolvedPath + "/ffprobe.exe");
+                    callback();
+                });
+            };
 
-            //   res.on("data", function(chunk) {
-            //     console.log("BODY: " + chunk);
-            //     console.log("WRITING")
-            //     file.write(chunk);
-            //   });
-            // }).on('error', function(e) {
-            //   console.log("Got error: " + e.message);
-            //   file.end();
-            // });
+            //Inputs temp.mp3 and copys audio stream into a corrected file name mp3
+            function writeSongMeta() {
+                ffmpeg(temp_mp3)
+                    .audioBitrate('128')
+                    // .audioChannels(2)
+                    .audioCodec('libmp3lame')
+                    .output(file_name)
+                    .outputOptions(
+                        '-id3v2_version', '3',
+                        '-metadata', title,
+                        '-metadata', artist
+                    )
+                    .on('start', function(commandLine) {
+                        console.log('Spawned Ffmpeg with command: ' + commandLine);
+                    })
+                    // .on('codecData', function(data) {
+                    //     console.log('Input is ' + data.audio + ' audio ' + 'with ' + data.audio_details + ' duration ' + data.duration + ' ' + data.format);
+                    // })
+                    .on('progress', function(progress) {
+                        console.log('Processing: ' + progress.percent + '% done');
+                        // console.log('Processing: ' + progress.targetSize + ' target');
+                    })
+                    .on('error', function(err, stdout, stderr) {
+                        console.log(err.message); //this will likely return "code=1" not really useful
+                        console.log("stdout:\n" + stdout);
+                        console.log("stderr:\n" + stderr); //this will contain more detailed debugging info
+                    })
+                    .on('end', function() {
+                        console.log('Finished processing');
+                        fs.unlinkSync(temp_mp3);
+                        console.log('Successfully deleted temp.mp3');
+                    })
+                    .run();
+            };
         },
         //Concats new song list to old, checking for duplicates
         concatSongs: function (originalList, extendedList, callback) {
