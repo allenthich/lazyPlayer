@@ -1,0 +1,17 @@
+#downloads .progress {
+  margin-bottom: 0;
+  overflow: visible;
+  background-color: transparent;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#downloads .progress-bar {
+  position: relative;
+  bottom: 0;
+  height: 19px;
+  color: #000;
+  background-color: #EBB900;
+  box-shadow: none;
+}

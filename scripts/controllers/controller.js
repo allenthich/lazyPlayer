@@ -1,5 +1,5 @@
 //Home controller loads only ONCE
-mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFactory, $scope, $location) {
+mpApp.controller("mpAppController", function ($log, mpAppFactory, hypeMFactory, downloadsFactory, $scope, $location) {
     $scope.headerSrc = "views/header.html";
 
     var playingSongId = null;
@@ -12,6 +12,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
 
     //HypeM popular page
     var hypePopPage = 1;
+    $scope.numDownloads = 0;
 
     console.log("Calling mpAppController")
 
@@ -19,7 +20,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     mpAppFactory.loadSoundManager();
 
     //Load Top 20 from Hypemachine 
-    var hypeListReady = mpAppHypeMFactory.getHypePopList(hypePopPage);
+    var hypeListReady = hypeMFactory.getHypePopList(hypePopPage);
     hypeListReady.then(function(hypePoplist) {
         console.log("mpAppController: ", hypePoplist);
         $scope.topTwenty = hypePoplist;
@@ -30,7 +31,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
             //if (options.playOnStartUp)
             // $scope.stream($scope.currentPlayingSong.mediaid, 0);
 
-            // var serveLink = mpAppHypeMFactory.getServeURL($scope.currentPlayingSong.mediaid);
+            // var serveLink = hypeMFactory.getServeURL($scope.currentPlayingSong.mediaid);
             // var songId = 'hype-' + $scope.currentPlayingSong.mediaid;
             // serveLink.then(function(response) {
             //     $scope.currentSong = soundManager.createSound({
@@ -51,7 +52,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     });
 
     //Get access token from Soundcloud for playing Hypemachine songs
-    // var getSCToken = mpAppHypeMFactory.scAuth();
+    // var getSCToken = hypeMFactory.scAuth();
     // getSCToken.then(function(response){
     //     $scope.scToken = response.data.access_token;
     // });
@@ -79,7 +80,7 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
 
             $scope.currentPlayingSong = $scope.topTwenty[songIndex];
 
-            var serveLink = mpAppHypeMFactory.getServeURL(id);
+            var serveLink = hypeMFactory.getServeURL(id);
             serveLink.then(function(response) {
                 console.log('Response url: ', response);
                 soundManager.stopAll();
@@ -122,18 +123,35 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
     };
 
     $scope.downloadSong = function(song) {
-        var serveLink = mpAppHypeMFactory.getServeURL(song.mediaid);
-        serveLink.then(function(response) {
-            var directSongURL = response.data.url;
-            mpAppHypeMFactory.downloadSong(directSongURL, song);
+        // var serveLink = hypeMFactory.getServeURL(song.mediaid);
+        // serveLink.then(function(response) {
+        //     var directSongURL = response.data.url;
+        //     console.log(directSongURL);
+        //     console.log(song);
+        //     // hypeMFactory.downloadSong(directSongURL, song);
+        // });
+        downloadsFactory.queueSongDownload(song, function(currNumDownloads) {
+            $scope.numDownloads = currNumDownloads;
+
+            $scope.numDownloads = downloadsFactory.downloadFromQueue();
         });
     };
 
+    //Watch to see if downloads are queue and download
+    // $scope.$watch('numDownloads', function() {
+    //     console.log("Watching")
+    //     if ($scope.numDownloads > 0) {
+    //         downloadsFactory.downloadFromQueue(function(newCurrNumDownloads) {
+    //             $scope.numDownloads = newCurrNumDownloads;
+    //         });
+    //     }
+    // });
+
     //Gets next page of popular MAX:50 songs
     function loadNextPoplist() {
-        var hypeListReady = mpAppHypeMFactory.getHypePopList(++hypePopPage);
+        var hypeListReady = hypeMFactory.getHypePopList(++hypePopPage);
         hypeListReady.then(function(hypePoplist) {
-            mpAppHypeMFactory.concatSongs($scope.topTwenty, hypePoplist, function (updatedList) {
+            hypeMFactory.concatSongs($scope.topTwenty, hypePoplist, function (updatedList) {
                 $scope.topTwenty = updatedList;
             });
         });
@@ -150,22 +168,22 @@ mpApp.controller("mpAppController", function ($log, mpAppFactory, mpAppHypeMFact
 });
 
 //Reloads everytime route redirects
-mpApp.controller("mpAppHypeMController", function ($scope, mpAppHypeMFactory, $location) {
+mpApp.controller("mpAppHypeMController", function ($scope, hypeMFactory, $location) {
     console.log("Calling mpAppHypeMController")
-    var hypeListReady = mpAppHypeMFactory.getHypePopList();
+    var hypeListReady = hypeMFactory.getHypePopList();
 
     hypeListReady.then(function(hypePoplist) {
         console.log("mpAppHypeMController: ", hypePoplist);
         $scope.topTwenty = hypePoplist;
     });
-    //console.log(mpAppHypeMFactory);
-    // $http.get(mpAppHypeMFactory).success(function(data, status, headers){
+    //console.log(hypeMFactory);
+    // $http.get(hypeMFactory).success(function(data, status, headers){
     //     console.log('data', data);
     //     console.log('status', status);
     //     console.log('headers', headers);
     // });
 
-    // $scope.movies = mpAppHypeMFactory.query();
+    // $scope.movies = hypeMFactory.query();
  
     $scope.currMovie = null;
     // $scope.getMovieById = function (id) {
@@ -199,9 +217,17 @@ mpApp.controller("mpApp8tracksController", function($scope, $routeParams){
     console.log("Calling mpApp8tracksController")
 
 });
-mpApp.controller("mpAppDownloadsController", function($scope, $routeParams){
+mpApp.controller("mpAppDownloadsController", function($scope, $routeParams, downloadsFactory){
+    $scope.downloadsFactory = downloadsFactory;
     console.log("Calling mpAppDownloadsController")
 
+    $scope.downloads = downloadsFactory.getDownloads();
+    $scope.downloadIds = downloadsFactory.getDownloadIds();
+
+    //Reactively watch for download progress in the service to update ctrlr
+    $scope.$watch('downloadsFactory.getDownloads()', function (updatedDL) {
+        $scope.downloads = updatedDL;
+    });
 });
 // mpApp.controller("movieDetailsController", function ($scope, $routeParams) {
 //     $scope.getMovieById($routeParams.id);

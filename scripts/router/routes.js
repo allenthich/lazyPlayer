@@ -9,8 +9,8 @@ mpApp.config(function ($routeProvider) {
         }).when('/8tracks', {
             templateUrl: 'views/8tracks.html',
             controller: 'mpApp8tracksController'
-        }).when('/downloads', {
-            templateUrl: 'views/downloads.html',
+        }).when('/manage', {
+            templateUrl: 'views/manage.html',
             controller: 'mpAppDownloadsController'
         })
         .otherwise({

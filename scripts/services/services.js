@@ -20,7 +20,7 @@ mpApp.factory('mpAppFactory', function ($q, $http) {
     }
 });
 
-mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
+mpApp.factory('hypeMFactory', function ($q, $http) {
     return {
         getHypePopList: function (page) {
             var hypePoplist =[];
@@ -75,7 +75,104 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
         //         });
         //     });
         // },
-        downloadSong: function (file_url, songMeta) {
+        
+        //Concats new song list to old, checking for duplicates
+        concatSongs: function (originalList, extendedList, callback) {
+            var songCount = extendedList.length;
+            extendedList.forEach(function (song) {
+                ++ songCount;
+                if (originalList.indexOf(song) == -1)
+                    originalList.push(song);
+                if (songCount == extendedList.length)
+                    callback(originalList);
+            });
+        }
+    };
+});
+
+//Service that manages downloads, their queue order, and downloading a song
+mpApp.factory('downloadsFactory', function ($q, $http, $rootScope, hypeMFactory) {
+    var downloads = {};
+
+    //downloadIds is used to simply used for comparators: checking which songs are queued and how many are queued
+    var downloadIds = [];
+    var numDownloads = 0;
+    var queuePosition = 0;
+    var downloadingLocked = false;
+
+    return {
+        //Used to create unique temp mp3 files for filestream
+        generateId: function() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        },
+        getDownloads: function() {
+            return downloads;
+        },
+        getDownloadIds: function() {
+            return downloadIds;
+        },
+        getNumDownloads: function() {
+            return numDownloads;
+        },
+        incNumDownloads: function() {
+            return ++numDownloads;
+        },
+        decNumDownloads: function() {
+            return --numDownloads;
+        },
+        calculateProgress: function(song) {
+            return (((parseInt(song.downloadingProgress) + parseInt(song.processingProgress)) / 200.0) * 100).toFixed();
+        },
+        //Queues song and returns number of current queue
+        queueSongDownload: function(songMeta, callback) {
+            var self = this;
+
+            //Check downloadIds to prevent song download duplication
+            if (downloadIds.indexOf(songMeta.mediaid) != -1)
+                return;
+
+            console.log("Adding: ", songMeta.title, " to downloadQ");
+            downloadIds.push(songMeta.mediaid);
+            var song = {};
+            song.artist = songMeta.title.toString();
+            song.title = songMeta.artist.toString();
+            song.totalProgress = 0;
+            song.downloadingProgress = 0;
+            song.processingProgress = 0;
+            song.songSize = 0;
+            song.downloadingCompleted = false;
+            song.processingCompleted = false;
+            song.failed = false;
+            //TODO: Handle when getServeURL fails
+            var serveLink = hypeMFactory.getServeURL(songMeta.mediaid);
+            serveLink.then(function(response) {
+                song.directSongURL = response.data.url;
+                downloads[songMeta.mediaid] = song;
+                console.log(downloads)
+                callback(self.incNumDownloads());
+            });
+        },
+        downloadFromQueue: function() {
+            var self = this;
+            if (downloadingLocked){
+                return;
+            }
+            downloadingLocked = true;
+            console.log("Downloading from queue; position: ", queuePosition)
+            self.downloadSong(downloads[downloadIds[queuePosition++]], function() {
+                downloadingLocked = false;
+                self.decNumDownloads();
+                if (self.getNumDownloads() > 0) {
+                    self.downloadFromQueue();
+                    downloadingLocked = false;
+                } else {
+                    //Finished downloading song - remove from services
+                    return self.getNumDownloads();
+                }
+            });          
+        },
+        downloadSong: function (songMeta, callback) {
+            var self = this;
             // Dependencies
             var fs = require('fs');
             var http = require('http');
@@ -86,56 +183,89 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
 
             var DOWNLOAD_DIR = './';
             var file_name = songMeta.artist + " - " + songMeta.title + ".mp3";
-            var temp_mp3 = "temp.mp3";
+            var temp_mp3 = self.generateId() + '.mp3';
 
             //Creates new file stream to pipe mp3 chunks from HTTP res into
             var file = fs.createWriteStream(DOWNLOAD_DIR + temp_mp3);
 
-            var title ='title=' + songMeta.title.toString();
-            var artist = 'artist=' + songMeta.artist.toString();
+            var title ='title=' + songMeta.title;
+            var artist = 'artist=' + songMeta.artist;
 
-            var i = 0;
+            var downloaded = 0;
 
             //Get song from soundcloud's API
-            http.get(file_url, function(res) {
+            http.get(songMeta.directSongURL, function(res) {
                 console.log("Got response: " + res.statusCode);
+                var redirectURL = res.headers.location;
+                https.get(redirectURL, function(res) {
+                    var totalSize = res.headers['content-length'];
+                    songMeta.songSize = totalSize;
 
-                res.on("data", function(chunk) {
-                    //Soundcloud redirects us to a secure URL where the song is actually stored
-                    var redirectURL = JSON.parse(chunk).location;
-                    if (redirectURL) {
-                        https.get(redirectURL, function(res) {
-                            //Begin streaming the song chunks into a file stream
-                            res.on("data", function(chunk) {
-                                console.log("WRITING " + ++i);
-                                file.write(chunk);
-                            });
-                            res.on("end", function() {
-                                console.log("END FILE DOWNLOAD")
-                                file.end();
+                    //Begin streaming the song chunks into a file stream
+                    res.on("data", function(chunk) {
+                        downloaded += chunk.length;
+                        songMeta.downloadingProgress = ((downloaded / totalSize) * 100).toFixed();
+                        songMeta.totalProgress = self.calculateProgress(songMeta);
+                        $rootScope.$apply();
+                        file.write(chunk);
+                    });
+                    res.on("end", function() {
+                        console.log("END FILE DOWNLOAD");
+                        songMeta.downloadingCompleted = true;
+                        file.end();
 
-                                //Sets ffmpeg source/path and writes meta into file
-                                setFfmpeg(function() {
-                                    writeSongMeta();
-                                });
-                            });
-
-                        }).on('error', function(e) {
-                          console.log("Got error: " + e.message);
-                          file.end();
+                        //Sets ffmpeg source/path and writes meta into file
+                        setFfmpeg(function() {
+                            writeSongMeta();
                         });
-                    }
+                    });
+
+                }).on('error', function(e) {
+                  console.log("Got error: " + e.message);
+                  songMeta.failed = true;
+                  file.end();
                 });
+                // res.on("data", function(chunk) {
+                //     //Soundcloud redirects us to a secure URL where the song is actually stored
+                //     console.log("Chunk: ", chunk);
+                //     //TODO: Handle when chunk returns nothing - request dropped?
+                //     if (chunk) {
+                //         var redirectURL = JSON.parse(chunk).location;
+                //         https.get(redirectURL, function(res) {
+                //             //Begin streaming the song chunks into a file stream
+                //             res.on("data", function(chunk) {
+                //                 console.log("WRITING " + ++i);
+                //                 file.write(chunk);
+                //             });
+                //             res.on("end", function() {
+                //                 console.log("END FILE DOWNLOAD")
+                //                 file.end();
+
+                //                 //Sets ffmpeg source/path and writes meta into file
+                //                 setFfmpeg(function() {
+                //                     writeSongMeta();
+                //                 });
+                //             });
+
+                //         }).on('error', function(e) {
+                //           console.log("Got error: " + e.message);
+                //           file.end();
+                //         });
+                //     }
+                // });
             }).on('error', function(e) {
               console.log("Got error: " + e.message);
+              songMeta.failed = true;
               file.end();
             });
 
             //Set paths for ffmpeg and ffprobe before use
             function setFfmpeg (callback) {
+                //TODO: Handle linux directory no bin
                 fs.realpath("./ffmpeg/bin/", function(err, resolvedPath) {
                     if (err) throw err;
                     // console.log(resolvedPath)
+                    //TODO: Handle linux file extensions
                     ffmpeg.setFfmpegPath(resolvedPath + "/ffmpeg.exe");
                     ffmpeg.setFfprobePath(resolvedPath + "/ffprobe.exe");
                     callback();
@@ -161,36 +291,29 @@ mpApp.factory('mpAppHypeMFactory', function ($q, $http) {
                     //     console.log('Input is ' + data.audio + ' audio ' + 'with ' + data.audio_details + ' duration ' + data.duration + ' ' + data.format);
                     // })
                     .on('progress', function(progress) {
-                        console.log('Processing: ' + progress.percent + '% done');
+                        console.log('Processing: ' + progress.percent.toFixed() + '% done');
+                        songMeta.processingProgress = progress.percent.toFixed();
+                        songMeta.totalProgress = self.calculateProgress(songMeta);
+                        $rootScope.$apply();
                         // console.log('Processing: ' + progress.targetSize + ' target');
                     })
                     .on('error', function(err, stdout, stderr) {
                         console.log(err.message); //this will likely return "code=1" not really useful
                         console.log("stdout:\n" + stdout);
                         console.log("stderr:\n" + stderr); //this will contain more detailed debugging info
+                        songMeta.failed = true;
                     })
                     .on('end', function() {
                         console.log('Finished processing');
+                        songMeta.processingCompleted = true;
+                        songMeta.processingProgress = 100.0;
+                        songMeta.totalProgress = self.calculateProgress(songMeta);
+                        $rootScope.$apply();
                         fs.unlinkSync(temp_mp3);
-                        console.log('Successfully deleted temp.mp3');
+                        callback();
                     })
                     .run();
             };
-        },
-        //Concats new song list to old, checking for duplicates
-        concatSongs: function (originalList, extendedList, callback) {
-            var songCount = extendedList.length;
-            extendedList.forEach(function (song) {
-                ++ songCount;
-                if (originalList.indexOf(song) == -1)
-                    originalList.push(song);
-                if (songCount == extendedList.length)
-                    callback(originalList);
-            });
         }
     };
 });
- 
-// mpApp.factory('mpApp8tracksFactory', function ($resource) {
-//     return $resource('http://moviestub.cloudno.de/bookings');
-// });
