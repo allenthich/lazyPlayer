@@ -6,9 +6,11 @@ It's built with NW.js, Node.js, Angular.js and uses SoundManager2 API.
 
 ## Current Working Features
 
-- Stream songs from HypeMachine's Top 20
+- Stream songs from HypeMachine's Top 20 by clicking song image or play button
 - Song downloading
 
 ## Installation notes
 
-Requires ffmpeg static binary to be located in folder 'ffmpeg' of root directory
+* You need to download and extract the latest NW.js binaries with this source.
+* Requires ffmpeg static binary to be located in folder 'ffmpeg' of root directory
+* Run nw.exe
